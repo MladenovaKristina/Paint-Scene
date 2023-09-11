@@ -124,7 +124,6 @@ export default class CanvasDrawController {
     }
 
     onUpdate(dt) {
-        if (!this.enabled || this._pointArray.length < 1) return;
 
         this._draw(dt);
     }

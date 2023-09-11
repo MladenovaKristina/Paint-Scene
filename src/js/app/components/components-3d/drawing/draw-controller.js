@@ -29,21 +29,17 @@ export default class DrawController {
         this._pointer.y = -(y / window.innerHeight) * 2 + 1;
 
         const point = this.onRaycast();
-        // point && 
         this._canvasDrawController.onDown(point.x, point.y);
 
     }
 
     onMove(x, y) {
-        // console.log("draw draw moving")
 
-        // if (!this._isDown) return;
 
         this._pointer.x = (x / window.innerWidth) * 2 - 1;
         this._pointer.y = -(y / window.innerHeight) * 2 + 1;
 
         const point = this.onRaycast();
-        // point && 
         this._canvasDrawController.onMove(point.x, point.y);
     }
 
