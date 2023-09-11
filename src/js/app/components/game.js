@@ -61,6 +61,7 @@ export default class Game {
       this.messageDispatcher.post(this.onFinishEvent);
     });
   }
+  
   _init3D() {
     this._layout3d = new Layout3d(this._camera);
     this._scene.add(this._layout3d)

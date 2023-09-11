@@ -13,8 +13,8 @@ export default class CanvasDrawController {
         this._isLineBroken = false;
 
         this.color = '#00ff00';
-        this._pointsCache = [];
-        this._lastPointDrawnIndex = 0;
+        this._pointArray = [];
+        this._lastToDraw = 0;
         this._prevToRedraw = 0;
 
         this._initCanvas();
@@ -43,7 +43,7 @@ export default class CanvasDrawController {
         this._canvas.style.left = (window.innerWidth / 2 - this._canvas.width / 2) + 'px';
         this._canvas.style.top = (window.innerHeight - this._canvas.height) - 50 + 'px';
 
-        this._pointsCache = [];
+        this._pointArray = [];
         this._prevToRedraw = 0;
     }
 
@@ -52,7 +52,7 @@ export default class CanvasDrawController {
         const realY = this._canvas.height / 2 + this._canvas.height * y;
 
         const pointData = new PointData(realX, realY, POINT_TYPES.START, this.color);
-        this._pointsCache.push(pointData);
+        this._pointArray.push(pointData);
 
         this._isLineBroken = false;
 
@@ -71,17 +71,17 @@ export default class CanvasDrawController {
         const pointData = new PointData(realX, realY, POINT_TYPES.PROGRESS, this.color);
         //?what this does
 
-        const l = this._pointsCache.length - 1;
+        const l = this._pointArray.length - 1;
         if (l < 0) {
             this.onDown(x, y);
             return;
         }
 
-        const diffX = Math.abs(realX - this._pointsCache[l].x);
-        const diffY = Math.abs(realY - this._pointsCache[l].y);
+        const diffX = Math.abs(realX - this._pointArray[l].x);
+        const diffY = Math.abs(realY - this._pointArray[l].y);
 
         if (diffX + diffY > 2)
-            this._pointsCache.push(pointData);
+            this._pointArray.push(pointData);
 
         this.onUpdate();
     }
@@ -91,8 +91,8 @@ export default class CanvasDrawController {
     }
 
     _draw(dt) {
-        for (let i = this._prevToRedraw; i < this._pointsCache.length; i++) {
-            const point = this._pointsCache[i];
+        for (let i = this._prevToRedraw; i < this._pointArray.length; i++) {
+            const point = this._pointArray[i];
 
             this._prevToRedraw = i;
 
@@ -106,7 +106,7 @@ export default class CanvasDrawController {
                 this._ctx.fill();
             }
             else if (point.type === POINT_TYPES.PROGRESS) {
-                const prevPoint = this._pointsCache[i - 1];
+                const prevPoint = this._pointArray[i - 1];
 
                 this._ctx.lineWidth = point.width;
                 this._ctx.lineCap = "round";
@@ -117,14 +117,14 @@ export default class CanvasDrawController {
                 this._ctx.stroke();
             }
 
-            this._lastPointDrawnIndex = i;
+            this._lastToDraw = i;
         }
 
-        this.messageDispatcher.post(this.onDrawEvent, this._pointsCache.length);
+        this.messageDispatcher.post(this.onDrawEvent, this._pointArray.length);
     }
 
     onUpdate(dt) {
-        if (!this.enabled || this._pointsCache.length < 1) return;
+        if (!this.enabled || this._pointArray.length < 1) return;
 
         this._draw(dt);
     }
