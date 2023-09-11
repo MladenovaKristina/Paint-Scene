@@ -28,10 +28,6 @@ export default class CanvasDrawController {
         this._canvas.style.left = "0";
         this._canvas.style.zIndex = "0";
         this._canvas.style.backgroundColor = "#ff00ff";
-        // this._canvas.style.display = "none";
-        // this._canvas.style.zIndex = "10";
-        // this._canvas.style.display = "block";
-        // this._canvas.style.opacity = "0.1"
 
         this._canvas.id = "drawingCanvas";
         const currentDiv = document.getElementById("appContainer");
@@ -73,6 +69,7 @@ export default class CanvasDrawController {
         const realY = this._canvas.height / 2 + this._canvas.height * y;
 
         const pointData = new PointData(realX, realY, POINT_TYPES.PROGRESS, this.color);
+        //?what this does
 
         const l = this._pointsCache.length - 1;
         if (l < 0) {
@@ -130,10 +127,6 @@ export default class CanvasDrawController {
         if (!this.enabled || this._pointsCache.length < 1) return;
 
         this._draw(dt);
-    }
-
-    get usedColors() {
-        return this._colorsUsed;
     }
 }
 
